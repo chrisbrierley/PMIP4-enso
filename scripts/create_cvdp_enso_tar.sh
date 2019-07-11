@@ -35,10 +35,10 @@ do
     ncks -A -v $mean_vars $CVDP_DATA_DIR/$ncfile $ncfile
   fi 
 done
-rename cvdp_data enso_data *.nc
+rename cvdp_data cvdp_enso *.nc
 
 #make a .tar.gz archive
-rm PMIP4_enso_data.tar.gz
-tar -czf PMIP4_enso_data.tar.gz *.enso_data.*-*.nc
-cp PMIP4_enso_data.tar.gz ~/public_html/PMIPVarData/data/PMIP4_enso_data.tar.gz
+rm PMIP4_cvdp_enso.tar.gz
+tar -czf PMIP4_cvdp_enso.tar.gz *.cvdp_enso.*-*.nc
+cp PMIP4_cvdp_enso.tar.gz ~/public_html/PMIPVarData/data/PMIP4_cvdp_enso.tar.gz
 # This 
