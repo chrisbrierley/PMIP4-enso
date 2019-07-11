@@ -36,9 +36,11 @@ do
   fi 
 done
 rename cvdp_data cvdp_enso *.nc
+#plus a couple of obs datasets
+ncks -O -v pr_spatialmean_ann,pr_spatialmean_djf,pr_spatialmean_jja,pr_spatialmean_mam,pr_spatialmean_son,pr_spatialstddev_ann,pr_spatialstddev_djf,pr_spatialstddev_jja,pr_spatialstddev_mam,pr_spatialstddev_son $CVDP_DATA_DIR/GPCP.cvdp_data.1979-1999.nc GPCP.cvdp_enso.1979-1999.nc
+ncks -O -v sst_spatialmean_ann,sst_spatialmean_djf,sst_spatialmean_jja,sst_spatialmean_mam,sst_spatialmean_son,sst_spatialstddev_ann,sst_spatialstddev_djf,sst_spatialstddev_jja,sst_spatialstddev_mam,sst_spatialstddev_son $CVDP_DATA_DIR/HadISST.cvdp_data.1920-1999.nc HadISST.cvdp_enso.1920-1999.nc
 
 #make a .tar.gz archive
 rm PMIP4_cvdp_enso.tar.gz
 tar -czf PMIP4_cvdp_enso.tar.gz *.cvdp_enso.*-*.nc
 cp PMIP4_cvdp_enso.tar.gz ~/public_html/PMIPVarData/data/PMIP4_cvdp_enso.tar.gz
-# This 

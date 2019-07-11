@@ -39,10 +39,10 @@ function find_files_wVar(name_str:string,variable_name:string)
 local data_dir,name_str,variable_name,fil
 begin
   present_dir=systemfunc("pwd")
-  if str_match_ind(present_dir,"scripts") then
-    data_dir=present_dir+"/../data/"
-  else
+  if ismissing(str_match_ind(present_dir,"scripts")) then
     data_dir=present_dir+"/data/"
+  else
+    data_dir=present_dir+"/../data/"
   end if
   if isatt(name_str,"quiet") then
     QUIET=name_str@quiet
@@ -1479,7 +1479,7 @@ begin
     do j=0,dimsizes(these_filenames)-1
       a_nopath=str_get_field(these_filenames(j),str_fields_count(these_filenames(j),"/"),"/")
       gcm=str_get_field(str_sub_str(a_nopath,"_"+expt_names(i),":"),1,":")
-      post_data=str_get_field(str_sub_str(a_nopath,"_data.",":"),2,":")
+      post_data=str_get_field(str_sub_str(a_nopath,"_enso.",":"),2,":")
       file_years=str_get_field(post_data,1,".")
       file_syear = stringtointeger(str_get_field(file_years,1,"-"))
       file_eyear = stringtointeger(str_get_field(file_years,2,"-"))
