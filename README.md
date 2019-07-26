@@ -13,7 +13,7 @@ This repository holds only the analysis code to investigate ENSO. It does not co
 Note: to run the NCL scripts use the command `ncl scriptname.ncl`. You will need NCL>6.4, which be installed the necessary environment for this repository with `conda create --name pmip4-enso --file environment.yml` and activated with `source activate pmip4-enso`.
 
 ## Responsibilities
-# The paper current paper outline, and who is responsible for the various sections
+### The paper current paper outline, and who is responsible for the various sections
 1. Introduction & Literature Review
    * Led by Soon-Il, with support from Sam and Jo
 2. Methods
