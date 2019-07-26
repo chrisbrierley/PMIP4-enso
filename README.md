@@ -22,6 +22,8 @@ Note: to run the NCL scripts use the command `ncl scriptname.ncl`. You will need
    * Led by Sam, with support from Qiong and Soon-Il
 4. Mean state changes
    * Led by Vittoria (LIG) with support from Charlie (midHolocene), Qiong (LGM), Jo (Future)
+5. ENSO amplitude changes
+   * Led by Charlie with support from Jo and Chris   
 5. Teleconnection pattern changes
    * Led by Jo with support from Vittoria and Chris
 6. ENSO Diversity (if required) 
