@@ -14,5 +14,19 @@ Note: to run the NCL scripts use the command `ncl scriptname.ncl`. You will need
 
 ## Responsibilities
 # The paper current paper outline, and who is responsible for the various sections
-  1 Introduction & Literature Review: led by Soon-Il, with support from Sam & Chris
-  2 
+1. Introduction & Literature Review
+  * Led by Soon-Il, with support from Sam and Jo
+2. Methods
+  * Led by Chris with support from Charlie and Sam
+3. Model Evaluation
+  * Led by Sam, with support from Qiong and Soon-Il
+4. Mean state changes
+  * Led by Vittoria (LIG) with support from Charlie (midHolocene), Qiong (LGM), Jo (Future)
+5. Teleconnection pattern changes
+  * Led by Jo with support from Vittoria and Chris
+6. ENSO Diversity (if required) 
+  * Led by Sam, with support from Chris and Soon-Il
+7. Discussion & Mechanisms
+  * Led by Soon-Il with support from Qiong and Jo
+8. Conclusions
+  * Led by Qiong with support from all
