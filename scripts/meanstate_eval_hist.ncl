@@ -6,26 +6,23 @@
 present_dir=systemfunc("pwd")
 if ismissing(str_match_ind(present_dir,"scripts")) then
   loadscript("./scripts/cvdp_enso.functions.ncl")
+  plots_dir=present_dir+"/plots/"
 else
   loadscript("./cvdp_enso.functions.ncl")
+  plots_dir=present_dir+"/../plots/"
 end if
 
 
 ;some plot switches
-VERBOSE=False ;if True, provides a modicum of more information about whats goign on in the plots - used for debugging mainly.
+VERBOSE=False ;if True, provides a modicum of more information about whats going on in the plots - used for debugging mainly.
 OUTPUT_TYPE="png"; either "png" or "pdf"
 INC_PREIND_wHIST=True; adds the preindustrial to all the plots including the Historical 
 troppac_region=(/(/-25.,25./),(/100.,280./)/);lat and lons of the edge of the plots (/(/latS,latN/),(/lonW,lonE/)/)
 expts=(/"piControl","historical","midHolocene","lgm","lig127k","1pctCO2","abrupt4xCO2"/)
 expts_color=(/"grey60","black","darkgreen","dodgerblue4","yellowgreen","firebrick","orangered2"/)
 
-if ismissing(str_match_ind(present_dir,"scripts")) then
-  plots_dir=present_dir+"/plots/"
-else
-  plots_dir=present_dir+"/../plots/"
-end if
 
-wks=gsn_open_wks(OUTPUT_TYPE,plots_dir+"modern_eval_hist")
+wks=gsn_open_wks(OUTPUT_TYPE,plots_dir+"meanstate_eval_precip")
 wks@VERBOSE=VERBOSE
 opt=True
   opt@cnLevelSelectionMode = "ManualLevels"   
