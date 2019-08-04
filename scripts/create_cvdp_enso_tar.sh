@@ -23,7 +23,7 @@ nino_vars="nino12,nino3,nino34,nino34_autocorrelation,nino34_hov_elnino,nino34_h
 mean_vars="pr_spatialmean_ann,pr_spatialmean_djf,pr_spatialmean_jja,pr_spatialmean_mam,pr_spatialmean_son,pr_spatialstddev_ann,pr_spatialstddev_djf,pr_spatialstddev_jja,pr_spatialstddev_mam,pr_spatialstddev_son,sst_spatialmean_ann,sst_spatialmean_djf,sst_spatialmean_jja,sst_spatialmean_mam,sst_spatialmean_son,sst_spatialstddev_ann,sst_spatialstddev_djf,sst_spatialstddev_jja,sst_spatialstddev_mam,sst_spatialstddev_son,tas_spatialmean_ann,tas_spatialmean_djf,tas_spatialmean_jja,tas_spatialmean_mam,tas_spatialmean_son,tas_spatialstddev_ann,tas_spatialstddev_djf,tas_spatialstddev_jja,tas_spatialstddev_mam,tas_spatialstddev_son"
 
 cd $CVDP_DATA_DIR
-ncfiles=`ls *.cvdp_data.*-*.nc`
+ncfiles=`ls *{piControl,historical,midHolocene-cal-adj,lgm-cal-adj,lig127k-cal-adj,1pctCO2,abrupt4xCO2}.cvdp_data.*-*.nc`
 echo $ncfiles
 cd $REPO_DATA_DIR
 for ncfile in $ncfiles
