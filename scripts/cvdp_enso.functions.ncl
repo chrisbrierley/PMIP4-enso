@@ -451,7 +451,7 @@ begin
     if .not.isatt(ts_opt,"renorm_climo_syear").or..not.isatt(ts_opt,"renorm_climo_eyear") then
       print("read_ts: you have asked for renorm_climo, but not set the start or end year")
     else
-      file_years=str_get_field(name_wfullpath,3,".")
+      file_years=str_get_field(str_sub_str(name_wfullpath,"/../","/"),3,".")
       file_syear = stringtointeger(str_get_field(file_years,1,"-"))
       file_eyear = stringtointeger(str_get_field(file_years,2,"-"))
       if (ts_opt@renorm_climo_syear.gt.0) then
@@ -496,7 +496,7 @@ begin
     if .not.isatt(ts_opt,"subset_syear").or..not.isatt(ts_opt,"subset_eyear") then
       print("read_ts: you have asked for 'subset', but not set start (subset_syear) or end (subset_eyear")
     else
-      file_years=str_get_field(name_wfullpath,3,".")
+      file_years=str_get_field(str_sub_str(name_wfullpath,"/../","/"),3,".")
       file_syear = stringtointeger(str_get_field(file_years,1,"-"))
       file_eyear = stringtointeger(str_get_field(file_years,2,"-"))
       if (ts_opt@subset_syear.gt.0) then
@@ -508,7 +508,7 @@ begin
         ;negative years are relative from end of the file  
         nyrs=(file_eyear-file_syear)+1
         if abs(ts_opt@subset_syear).gt.nyrs then
-          print("read_ts: your relative climatolgy renormalisation starts before the file does")  
+          print("read_ts: your relative temporal subset starts before the file does")  
         else
           syear=nyrs+ts_opt@subset_syear
           eyear=nyrs+ts_opt@subset_eyear
