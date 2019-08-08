@@ -14,7 +14,7 @@ end if
 
 
 ;some plot switches
-VERBOSE=True ;if True, provides a modicum of more information about whats going on in the plots - used for debugging mainly.
+VERBOSE=False ;if True, provides a modicum of more information about whats going on in the plots - used for debugging mainly.
 OUTPUT_TYPE="png"; either "png" or "pdf"
 GCM_DICTIONARY=False; if True, will not print model names, but alphabetic look up from table
 troppac_region=(/(/-25.,25./),(/100.,280./)/);lat and lons of the edge of the plots (/(/latS,latN/),(/lonW,lonE/)/)
@@ -32,19 +32,19 @@ do expt_i=0,n_expts-1
   ts_opt@NO_EXIT_ON_ERROR=True
   if any(this_expt.eq.(/"1pctCO2","abrupt4xCO2","rcp26","rcp85"/)) then
     ts_opt@subset=True
-    ts_opt@subset_syear=-30
+    ts_opt@subset_syear=-50
     ts_opt@subset_eyear=0
-    ts_opt@renorm_climo=True
-    ts_opt@renorm_climo_syear=-30
-    ts_opt@renorm_climo_eyear=0
-    ts_opt@DETREND=True
+    ;ts_opt@renorm_climo=False
+    ;ts_opt@renorm_climo_syear=-30
+    ;ts_opt@renorm_climo_eyear=0
+    ts_opt@DETREND=False
   end if
 
   do i=0,n_models-1
     a_nopath=str_get_field(fnames_both(i,0),str_fields_count(fnames_both(i,0),"/"),"/")
     gcm_names(i)=str_get_field(str_sub_str(a_nopath,"_"+this_expt,":"),1,":")
-    mode_sds(i,0)=(/stat_ts_var(fnames_both(i,0),"nino34","stddev",True)/)
-    mode_sds(i,1)=(/stat_ts_var(fnames_both(i,1),"nino34","stddev",False)/)
+    mode_sds(i,0)=(/stat_ts_var(fnames_both(i,0),"nino34_runstddev","mean",True)/)
+    mode_sds(i,1)=(/stat_ts_var(fnames_both(i,1),"nino34_runstddev","mean",False)/)
     if VERBOSE then
       print(gcm_names(i)+" in "+this_expt+" = "+mode_sds(i,0)+" & "+mode_sds(i,1)+" giving a ratio of "+\
       (mode_sds(i,0)-mode_sds(i,1))/mode_sds(i,1)*100.+"%") 
@@ -60,7 +60,6 @@ do expt_i=0,n_expts-1
   plot_res@vpHeightF = 0.33
   plot_res@gsnDraw = False
   plot_res@gsnFrame=False
-  plot_res@gsnYRefLine = 0
   plot_res@gsnXYBarChart = True
   plot_res@tiMainString = " "
   plot_res@gsnRightString = ""
@@ -81,6 +80,9 @@ do expt_i=0,n_expts-1
   plot_res@tmXBLabelDirection="Down"
   plot_res@trXMinF = 0.5
   plot_res@trXMaxF = n_models+0.5
+  plot_res@trYMinF = 0.0
+  plot_res@trYMaxF = 1.5
+  plot_res@gsnYRefLine=0.
   plot_res@gsnXYBarChartBarWidth = 0.4
   left_locations=fspan(0.5,n_models-0.5,n_models)+0.3
   right_locations=left_locations+0.4
@@ -95,8 +97,8 @@ do expt_i=0,n_expts-1
 
   plot_res@tiYAxisString = "Change in ~F33~s~F21~ (%)"
   plot_res@gsnXYBarChartColors="orange2"
-  plot_res@trYMaxF = max(fabs(mode_sds(:,2)))
-  plot_res@trYMinF = -max(fabs(mode_sds(:,2)))
+  plot_res@trYMaxF = 50.
+  plot_res@trYMinF = -50.
   diff_baseplot = gsn_csm_xy(wks,left_locations,mode_sds(:,2),plot_res)
 
   resP=True
