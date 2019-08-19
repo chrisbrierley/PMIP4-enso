@@ -15,7 +15,7 @@ end if
 
 ;some plot switches
 VERBOSE=False ;if True, provides a modicum of more information about whats going on in the plots - used for debugging mainly.
-OUTPUT_TYPE="png"; either "png" or "pdf"
+OUTPUT_TYPE="pdf"; either "png" or "pdf"
 GCM_DICTIONARY=False; if True, will not print model names, but alphabetic look up from table
 troppac_region=(/(/-25.,25./),(/100.,280./)/);lat and lons of the edge of the plots (/(/latS,latN/),(/lonW,lonE/)/)
 expts=(/"piControl","historical","midHolocene","lgm","lig127k","1pctCO2","abrupt4xCO2"/)

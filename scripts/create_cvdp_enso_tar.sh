@@ -32,13 +32,40 @@ do
   hasENSOvars $CVDP_DATA_DIR $ncfile
   if [ $? == 1 ]; then
     ncks -O -v $nino_vars $CVDP_DATA_DIR/$ncfile $ncfile
+    ncap2 -A -s 'nino34_spacomp_sst_ann=0.25f*(nino34_spacomp_sst_jja0+nino34_spacomp_sst_son0+nino34_spacomp_sst_djf1+nino34_spacomp_sst_mam1)' $ncfile $ncfile
     ncks -A -v $mean_vars $CVDP_DATA_DIR/$ncfile $ncfile
   fi 
 done
 rename cvdp_data cvdp_enso *.nc
 #plus a couple of obs datasets
-ncks -O -v pr_spatialmean_ann,pr_spatialmean_djf,pr_spatialmean_jja,pr_spatialmean_mam,pr_spatialmean_son,pr_spatialstddev_ann,pr_spatialstddev_djf,pr_spatialstddev_jja,pr_spatialstddev_mam,pr_spatialstddev_son $CVDP_DATA_DIR/GPCP.cvdp_data.1979-1999.nc GPCP.cvdp_enso.1979-1999.nc
-ncks -O -v sst_spatialmean_ann,sst_spatialmean_djf,sst_spatialmean_jja,sst_spatialmean_mam,sst_spatialmean_son,sst_spatialstddev_ann,sst_spatialstddev_djf,sst_spatialstddev_jja,sst_spatialstddev_mam,sst_spatialstddev_son $CVDP_DATA_DIR/HadISST.cvdp_data.1920-1999.nc HadISST.cvdp_enso.1920-1999.nc
+ncks -O -v pr_spatialmean_ann,pr_spatialmean_djf,pr_spatialmean_jja,pr_spatialmean_mam,pr_spatialmean_son,\
+pr_spatialstddev_ann,pr_spatialstddev_djf,pr_spatialstddev_jja,pr_spatialstddev_mam,pr_spatialstddev_son \
+  $CVDP_DATA_DIR/GPCP.cvdp_data.1979-1999.nc GPCP.cvdp_enso.1979-1999.nc
+
+ncks -O -v sst_spatialmean_ann,sst_spatialmean_djf,sst_spatialmean_jja,sst_spatialmean_mam,sst_spatialmean_son,\
+sst_spatialstddev_ann,sst_spatialstddev_djf,sst_spatialstddev_jja,sst_spatialstddev_mam,sst_spatialstddev_son,\
+nino12,nino3,nino34,nino34_autocorrelation,nino34_hov_elnino,nino34_hov_lanina,nino34_monthly_stddev,nino34_runstddev,\
+nino34_spacomp_sst_djf1,nino34_spacomp_sst_jja0,nino34_spacomp_sst_mam1,nino34_spacomp_sst_son0,\
+nino34_spectra,nino34_wavelet_power,nino34_wavelet_significance,nino4 \
+  $CVDP_DATA_DIR/HadISST.cvdp_data.1920-1999.nc HadISST.cvdp_enso.1920-1999.nc
+ncap2 -A -s 'nino34_spacomp_sst_ann=0.25f*(nino34_spacomp_sst_jja0+nino34_spacomp_sst_son0+nino34_spacomp_sst_djf1+nino34_spacomp_sst_mam1)' \
+  HadISST.cvdp_enso.1920-1999.nc HadISST.cvdp_enso.1920-1999.nc
+
+ncks -O -v sst_spatialmean_ann,sst_spatialmean_djf,sst_spatialmean_jja,sst_spatialmean_mam,sst_spatialmean_son,\
+sst_spatialstddev_ann,sst_spatialstddev_djf,sst_spatialstddev_jja,sst_spatialstddev_mam,sst_spatialstddev_son,\
+nino12,nino3,nino34,nino34_autocorrelation,nino34_hov_elnino,nino34_hov_lanina,nino34_monthly_stddev,nino34_runstddev,\
+nino34_spacomp_pr_djf1,nino34_spacomp_pr_jja0,nino34_spacomp_pr_mam1,nino34_spacomp_pr_son0,\
+nino34_spacomp_tas_djf1,nino34_spacomp_tas_jja0,nino34_spacomp_tas_mam1,nino34_spacomp_tas_son0,\
+nino34_spacomp_sst_djf1,nino34_spacomp_sst_jja0,nino34_spacomp_sst_mam1,nino34_spacomp_sst_son0,\
+nino34_spectra,nino34_wavelet_power,nino34_wavelet_significance,nino4 \
+  $CVDP_DATA_DIR/C20-Reanalysis.cvdp_data.1871-2012.nc C20-Reanalysis.cvdp_enso.1871-2012.nc
+ncap2 -A -s 'nino34_spacomp_sst_ann=0.25f*(nino34_spacomp_sst_jja0+nino34_spacomp_sst_son0+nino34_spacomp_sst_djf1+nino34_spacomp_sst_mam1)' \
+  C20-Reanalysis.cvdp_enso.1871-2012.nc C20-Reanalysis.cvdp_enso.1871-2012.nc
+ncap2 -A -s 'nino34_spacomp_pr_ann=0.25f*(nino34_spacomp_pr_jja0+nino34_spacomp_pr_son0+nino34_spacomp_pr_djf1+nino34_spacomp_pr_mam1)' \
+  C20-Reanalysis.cvdp_enso.1871-2012.nc C20-Reanalysis.cvdp_enso.1871-2012.nc
+ncap2 -A -s 'nino34_spacomp_tas_ann=0.25f*(nino34_spacomp_tas_jja0+nino34_spacomp_tas_son0+nino34_spacomp_tas_djf1+nino34_spacomp_tas_mam1)' \
+  C20-Reanalysis.cvdp_enso.1871-2012.nc C20-Reanalysis.cvdp_enso.1871-2012.nc
+
 
 #make a .tar.gz archive
 rm PMIP4_cvdp_enso.tar.gz

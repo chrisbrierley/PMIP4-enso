@@ -1,0 +1,9 @@
+enso_eval_sst.ncl
+enso_eval_tele_tas.ncl
+enso_eval_tele_pr.ncl
+changes_enso_sst.ncl
+changes_enso_tele_tas.ncl
+changes_enso_tele_pr.ncl
+scatter_enso_ampl_gmt.ncl
+scatter_enso_ampl_AnnCyc.ncl
+scatter_enso_ampl_ZSSTG.ncl

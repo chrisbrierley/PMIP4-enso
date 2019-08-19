@@ -21,7 +21,7 @@ else
   plots_dir=present_dir+"/../plots/"
 end if
 
-expts=(/"piControl","historical","midHolocene","lgm","lig127k","1pctCO2","abrupt4xCO2"/)
+expts=(/"piControl","historical","midHolocene-cal-adj","lgm-cal-adj","lig127k-cal-adj","1pctCO2","abrupt4xCO2"/)
 if GCM_DICTIONARY then
   createTableGCMsExptsYears(expts,"nino34",gcm_dict,"tex",plots_dir+"model_table.tex")
 else

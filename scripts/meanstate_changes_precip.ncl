@@ -15,7 +15,7 @@ end if
 
 ;some plot switches
 VERBOSE=False ;if True, provides a modicum of more information about whats going on in the plots - used for debugging mainly.
-OUTPUT_TYPE="png"; either "png" or "pdf"
+OUTPUT_TYPE="pdf"; either "png" or "pdf"
 INC_PREIND_wHIST=True; adds the preindustrial to all the plots including the Historical 
 troppac_region=(/(/-25.,25./),(/100.,280./)/);lat and lons of the edge of the plots (/(/latS,latN/),(/lonW,lonE/)/)
 expts=(/"piControl","historical","midHolocene-cal-adj","lgm-cal-adj","lig127k-cal-adj","1pctCO2","abrupt4xCO2"/)

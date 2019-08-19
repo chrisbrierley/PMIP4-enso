@@ -17,33 +17,21 @@ end if
 VERBOSE=False ;if True, provides a modicum of more information about whats going on in the plots - used for debugging mainly.
 OUTPUT_TYPE="pdf"; either "png" or "pdf"
 INC_PREIND_wHIST=True; adds the preindustrial to all the plots including the Historical 
-troppac_region=(/(/-25.,25./),(/100.,280./)/);lat and lons of the edge of the plots (/(/latS,latN/),(/lonW,lonE/)/)
 expts=(/"piControl","historical","midHolocene-cal-adj","lgm-cal-adj","lig127k-cal-adj","1pctCO2","abrupt4xCO2"/)
 expts_color=(/"grey60","black","darkgreen","dodgerblue4","yellowgreen","firebrick","orangered2"/)
 plot_letters=(/(/"a","b"/),(/"c","d"/),(/"e","f"/),(/"g","h"/),(/"i","j"/),(/"k","l"/)/)
 CONSISTENCY=True
 OVERLAY_PREIND=True
 OVERLAY_PREIND_MANUALLEV=(/0,12,2/);ie 0:12:2 mm/day
-TS_NOT_TAS=True ;if True use SST rather TAS in the mean state figure
 
-if TS_NOT_TAS then
-  djf_field="sst_spatialmean_djf"
-  jja_field="sst_spatialmean_jja"
-else
-  djf_field="tas_spatialmean_djf"
-  jja_field="tas_spatialmean_jja"
-end if
+djf_field="nino34_spacomp_tas_djf1"
+jja_field="nino34_spacomp_tas_jja0"
 
 
-wks=gsn_open_wks(OUTPUT_TYPE,plots_dir+"meanstate_changes_temp")
+wks=gsn_open_wks(OUTPUT_TYPE,plots_dir+"enso_changes_tele_tas")
 wks@VERBOSE=VERBOSE
 opt=True
   opt@mpProjection="CylindricalEqualArea"
-  opt@mpLimitMode="LatLon"
-  opt@mpMinLonF=troppac_region(1,0)
-  opt@mpMaxLonF=troppac_region(1,1)
-  opt@mpMinLatF=troppac_region(0,0)
-  opt@mpMaxLatF=troppac_region(0,1)
   opt@mpCenterLonF=180.
   opt@lbLabelBarOn=False
   opt@tiMainString=""
