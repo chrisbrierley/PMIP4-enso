@@ -595,42 +595,53 @@ end;read_ts
 ; return a single summary statistic for a timeseries
 ;   stat_name = either one of "mean","stddev","skew","kurtosis" (as computed by stat4)
 ;      or "pcvar", which gives the %-age variance explained (for EOF-based timeseries)
+;      or "AnnCycAmp" which gives max(AnnCycle)-min(AnnCycle)
 
 undef("stat_ts_var")
 function stat_ts_var(name_wfullpath:string,variable_name:string,stat_name:string,ts_opt:logical)
 local name_wfullpath,variable_name,ts_opt,fil,poss_stats,stat_name
 begin
   ;read in variable and perform some checks.
-  poss_stats=(/"mean","stddev","skew","kurtosis","pcvar"/)
+  poss_stats=(/"mean","stddev","skew","kurtosis","pcvar","AnnCycAmp"/)
   if .not.any(poss_stats.eq.stat_name) then
     print("stat_ts_var: The only possible statistics accepted are "+str_join(poss_stats,","))
     exit
   end if
-
+  
   var_in=read_ts(name_wfullpath,variable_name,ts_opt)
   
   if .not.all(ismissing(var_in)) then  
-    if stat_name.eq."pcvar" then      
-      pcvar=str_squeeze(str_sub_str(var_in@pcvar,"%"," "))
-      stat_out=stringtofloat(pcvar)
-    else
-      stats=dim_stat4(var_in)
-      stat_ind=ind(poss_stats.eq.stat_name)
-      if stat_ind.gt.0.and.(all(var_in.eq.stats(0))) then
-        ;If all the values are identical, only the mean is relevant
+    if stat_name.eq."AnnCycAmp" then      
+      if .not.isatt(var_in,"AnnCycle") then
         stat_out=default_fillvalue("float")
         stat_out@_FillValue=default_fillvalue("float")
       else
-        stat_out=stats(stat_ind)
-      end if 
+        stat_out=max(var_in@AnnCycle)-min(var_in@AnnCycle)
+      end if
+    else   
+      if stat_name.eq."pcvar" then      
+        pcvar=str_squeeze(str_sub_str(var_in@pcvar,"%"," "))
+        stat_out=stringtofloat(pcvar)
+      else
+        stats=dim_stat4(var_in)
+        stat_ind=ind(poss_stats.eq.stat_name)
+        if stat_ind.gt.0.and.(all(var_in.eq.stats(0))) then
+          ;If all the values are identical, only the mean is relevant
+          stat_out=default_fillvalue("float")
+          stat_out@_FillValue=default_fillvalue("float")
+        else
+          stat_out=stats(stat_ind)
+        end if 
+      end if
+      copy_VarAtts(var_in,stat_out)
+      stat_out@stat=stat_name
     end if
-    copy_VarAtts(var_in,stat_out)
-    stat_out@stat=stat_name
   else
     stat_out=default_fillvalue("float")
     stat_out@_FillValue=default_fillvalue("float")
   end if
-  return(stat_out)
+
+return(stat_out)
 end;stat_ts_var
 
 ;===================================================================================================
@@ -1546,6 +1557,7 @@ begin
     end do 
     footer=(/"\hline","\end{tabular}",\
              "\caption{The number of years of data for "+str_sub_str(variable_name,"_"," ")+" in the CVDP archive}",\
+             "\label{tab:model}"/)
              "\end{table}"/)
     write_table(output_filename, "a", [/footer/], "%s")
   end if
