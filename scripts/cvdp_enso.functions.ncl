@@ -1557,7 +1557,7 @@ begin
     end do 
     footer=(/"\hline","\end{tabular}",\
              "\caption{The number of years of data for "+str_sub_str(variable_name,"_"," ")+" in the CVDP archive}",\
-             "\label{tab:model}"/)
+             "\label{tab:model}",\
              "\end{table}"/)
     write_table(output_filename, "a", [/footer/], "%s")
   end if
