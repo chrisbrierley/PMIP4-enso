@@ -699,6 +699,22 @@ undef("plotCVDPcomparisonMaps")
 procedure plotCVDPcomparisonMaps(strs,variable_name:string,wks_name,opt_res:logical,opt_panel_res:logical)
 local mapres,panres,plots,ensmn,ensmn,patt,nvars,LeftStrings,RightStrings,CenterStrings,fnames,fnames,lat,lon,dims,opt_res,opt_panel_res
 begin
+; This has the supra-option of for opt_res NORMALISE and name_to_normalise_by
+
+  if opt_res.and.isatt(opt_res,"NORMALISE") then
+    ;this option will plot the ratio of the fields 
+    NORMALISE=opt_res@NORMALISE
+    delete(opt_res@NORMALISE)
+    if isatt(opt_res,"name_to_normalise_by") then
+      name_to_normalise_by=opt_res@name_to_normalise_by
+      delete(opt_res@name_to_normalise_by)
+    else
+      print("You have selected NORMALISE, but not provided the attribute name by which to normalise it (as name_to_normalise_by)")
+      exit
+    end if
+  else
+    NORMALISE=False
+  end if
 
   ;process some of the input variables
   nvars=dimsizes(variable_name)
@@ -813,17 +829,30 @@ begin
       patt&lat=lat
       patt!2="lon" 
       patt&lon=lon
+      if NORMALISE then
+        norm_attrs=new(dimsizes(fnames),float)
+      end if
       do mod_i=0,dimsizes(fnames)-1
         if isatt(wks_name,"VERBOSE").and.(wks_name@VERBOSE) then
           print("Loading "+variable_name(var_i)+" from file "+mod_i+":"+fnames(mod_i))
         end if
-        patt(mod_i,:,:)=read_latlon_var(fnames(mod_i),variable_name(var_i),True)
+        if NORMALISE then
+          this_patt=read_latlon_var(fnames(mod_i),variable_name(var_i),True)
+          norm_attrs(mod_i)=this_patt@$name_to_normalise_by$
+          patt(mod_i,:,:)=(/this_patt/norm_attrs(mod_i)/)
+          delete(this_patt)
+        else
+          patt(mod_i,:,:)=read_latlon_var(fnames(mod_i),variable_name(var_i),True)
+        end if
       end do
       ensmn=(/dim_avg(patt(lat|:,lon|:,run|:))/)
 
       ;make the variable name the LabelBar title if not set
       if .not.isatt(panres,"lbTitleString") then
         panres@lbTitleString=dummy@long_name
+        if NORMALISE then
+          panres@lbTitleString="Normalised "+panres@lbTitleString
+        end if
       end if
       mapres@lbTitleString=panres@lbTitleString
       
@@ -833,6 +862,10 @@ begin
       end if
       if isvar("RightStrings") then
         mapres@gsnRightString = RightStrings(nvars*str_i+var_i)
+      else
+        if NORMALISE then
+          mapres@gsnRightString = avg(norm_attrs)       
+        end if
       end if
       if isvar("CenterStrings") then
         mapres@gsnCenterString = CenterStrings(nvars*str_i+var_i)
@@ -842,7 +875,11 @@ begin
       end if
 
       plots(nvars*str_i+var_i)=gsn_csm_contour_map(wks,ensmn,mapres) 
-      delete([/patt,ensmn,dummy,fnames/])
+      if NORMALISE then
+        delete([/patt,ensmn,dummy,fnames,norm_attrs/])
+      else
+        delete([/patt,ensmn,dummy,fnames/])
+      end if
     end do;finish looping over the variables
   end do
   
@@ -941,6 +978,21 @@ begin
     print("plotDiffEnsMnMaps: RATIO is a/b and PERCENTAGE is 100*(a-b)/a - please go back and select the correct option")
     exit
   end if
+  if opt_res.and.isatt(opt_res,"NORMALISE") then
+    ;this option will plot the ratio of the fields 
+    NORMALISE=opt_res@NORMALISE
+    delete(opt_res@NORMALISE)
+    if isatt(opt_res,"name_to_normalise_by") then
+      name_to_normalise_by=opt_res@name_to_normalise_by
+      delete(opt_res@name_to_normalise_by)
+    else
+      print("You have selected NORMALISE, but not provided the attribute name by which to normalise it (as name_to_normalise_by)")
+      exit
+    end if
+  else
+    NORMALISE=False
+  end if
+
   if opt_res then
     if isatt(opt_res,"gsnLeftString").and.dimsizes(opt_res@gsnLeftString).eq.nvars then
       LeftStrings=opt_res@gsnLeftString
@@ -1172,8 +1224,16 @@ begin
         if VERBOSE then
           print("Loading "+variable_name(var_i)+" from file "+mod_i+":"+fnames_both(mod_i,:))
         end if
-        patt(mod_i,0,:,:)=read_latlon_var(fnames_both(mod_i,0),variable_name(var_i),True)
-        patt(mod_i,1,:,:)=read_latlon_var(fnames_both(mod_i,1),variable_name(var_i),True)
+        if NORMALISE then
+          this_patt=read_latlon_var(fnames_both(mod_i,0),variable_name(var_i),True)
+          patt(mod_i,0,:,:)=(/this_patt/this_patt@$name_to_normalise_by$/)
+          this_patt=read_latlon_var(fnames_both(mod_i,1),variable_name(var_i),True)
+          patt(mod_i,1,:,:)=(/this_patt/this_patt@$name_to_normalise_by$/)
+          delete(this_patt)
+        else
+          patt(mod_i,0,:,:)=read_latlon_var(fnames_both(mod_i,0),variable_name(var_i),True)
+          patt(mod_i,1,:,:)=read_latlon_var(fnames_both(mod_i,1),variable_name(var_i),True)
+        end if
         if MASK_TRIVIAL then
           gm_patt(mod_i,0)= (/wgt_areaave_Wrap(patt(mod_i,0,:,:),coswgt,1.0,0)/)
           gm_patt(mod_i,1)= (/wgt_areaave_Wrap(patt(mod_i,1,:,:),coswgt,1.0,0)/)
