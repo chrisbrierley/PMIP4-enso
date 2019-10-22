@@ -22,7 +22,7 @@ expts_color=(/"grey60","black","darkgreen","dodgerblue4","yellowgreen","firebric
 plot_letters=(/(/"a","b"/),(/"c","d"/),(/"e","f"/),(/"g","h"/),(/"i","j"/),(/"k","l"/)/)
 CONSISTENCY=True
 OVERLAY_PREIND=True
-OVERLAY_PREIND_MANUALLEV=(/0,12,2/);ie 0:12:2 mm/day
+OVERLAY_PREIND_MANUALLEV=(/0,40,2/);ie 0:12:2 mm/day
 
 djf_field="nino34_spacomp_tas_djf1"
 jja_field="nino34_spacomp_tas_jja0"
@@ -46,7 +46,7 @@ opt=True
   opt@OVERLAY_CONTROL=OVERLAY_PREIND
   opt@OVERLAY_CONTROL_MANUALLEVS=OVERLAY_PREIND_MANUALLEV
   opt@NORMALISE=True
-  opt@name_to_normalise_by="composited_stddev"
+  opt@name_to_normalise_by="composited_avg_ampl"
 opt_pan=True
   opt_pan@lbTitleOn=False
   opt_pan@lbOrientation = "vertical"
@@ -60,8 +60,8 @@ n_expts=dimsizes(expts)-2
 do i=0,n_expts-1
   opt@gsnLeftString=plot_letters(i,:)
   opt@gsnRightString=expts(i+2)+(/" DJF"," JJA"/)
-  opt_pan@gsnPanelBottom=tofloat(i)/n_expts
-  opt_pan@gsnPanelTop=tofloat(i+1)/n_expts
+  opt_pan@gsnPanelTop=1-(tofloat(i)/n_expts)
+  opt_pan@gsnPanelBottom=1-(tofloat(i+1)/n_expts)
   plotDiffEnsMnMaps(expts(i+2),expts(0),(/djf_field,jja_field/),wks,opt,opt_pan)
 end do
 

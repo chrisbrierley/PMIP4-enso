@@ -23,7 +23,7 @@ expts_color=(/"grey60","black","darkgreen","dodgerblue4","yellowgreen","firebric
 plot_letters=(/(/"a","b"/),(/"c","d"/),(/"e","f"/),(/"g","h"/),(/"i","j"/),(/"k","l"/)/)
 CONSISTENCY=True
 OVERLAY_PREIND=True
-OVERLAY_PREIND_MANUALLEV=(/0,12,2/);ie 0:12:2 mm/day
+OVERLAY_PREIND_MANUALLEV=(/0,40,2/);ie 0:12:2 mm/day
 TS_NOT_TAS=True ;if True use SST rather TAS in the mean state figure
 
 if TS_NOT_TAS then
@@ -68,8 +68,8 @@ n_expts=dimsizes(expts)-2
 do i=0,n_expts-1
   opt@gsnLeftString=plot_letters(i,:)
   opt@gsnRightString=expts(i+2)+(/" DJF"," JJA"/)
-  opt_pan@gsnPanelBottom=tofloat(i)/n_expts
-  opt_pan@gsnPanelTop=tofloat(i+1)/n_expts
+  opt_pan@gsnPanelTop=1-(tofloat(i)/n_expts)
+  opt_pan@gsnPanelBottom=1-(tofloat(i+1)/n_expts)
   plotDiffEnsMnMaps(expts(i+2),expts(0),(/djf_field,jja_field/),wks,opt,opt_pan)
 end do
 

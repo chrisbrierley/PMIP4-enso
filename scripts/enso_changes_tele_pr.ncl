@@ -60,8 +60,8 @@ n_expts=dimsizes(expts)-2
 do i=0,n_expts-1
   opt@gsnLeftString=plot_letters(i,:)
   opt@gsnRightString=expts(i+2)+(/" DJF"," JJA"/)
-  opt_pan@gsnPanelBottom=tofloat(i)/n_expts
-  opt_pan@gsnPanelTop=tofloat(i+1)/n_expts
+  opt_pan@gsnPanelTop=1-(tofloat(i)/n_expts)
+  opt_pan@gsnPanelBottom=1-(tofloat(i+1)/n_expts)
   plotDiffEnsMnMaps(expts(i+2),expts(0),(/djf_field,jja_field/),wks,opt,opt_pan)
 end do
 
