@@ -407,16 +407,40 @@ begin
     end if
   end if
   fil=addfile(name_wfullpath,"r")
-  if .not.isfilevar(fil,variable_name) then
-    if NO_EXIT_ON_ERROR then
-      return(missing)
+  if any(variable_name.eq.(/"NWP","NCT"/)) then
+    if .not.isfilevar(fil,"nino34") then
+      if NO_EXIT_ON_ERROR then
+        return(missing)
+      else
+        ;Hard exit if not correct, as only valid files should have been selected with find_files_wVar  
+        print("There is not a "+variable_name+" variable in "+name_wfullpath)
+        exit
+      end if 
+    end if
+    nino3=fil->nino3
+    nino4=fil->nino4
+    alpha=nino3*nino4 ;set up alpha array
+    alpha=where(alpha.gt.0,0.4,0)
+    var_in=nino3
+    if variable_name.eq."NWP" then
+      var_in=nino3-alpha*nino4;NCT
     else
-      ;Hard exit if not correct, as only valid files should have been selected with find_files_wVar  
-      print("There is not a "+variable_name+" variable in "+name_wfullpath)
-      exit
-    end if 
+      var_in=nino4-alpha*nino3;NWP
+    end if
+    delete([/nino3,nino4,alpha/])
+  else
+    if .not.isfilevar(fil,variable_name) then
+      if NO_EXIT_ON_ERROR then
+        return(missing)
+      else
+        ;Hard exit if not correct, as only valid files should have been selected with find_files_wVar  
+        print("There is not a "+variable_name+" variable in "+name_wfullpath)
+        exit
+      end if 
+    end if
+    var_in = fil->$variable_name$
   end if
-  var_in = fil->$variable_name$
+
   read_ts_note=""
   if .not.(isdim(var_in,"time").or.isdim(var_in,"TIME")) then
     if NO_EXIT_ON_ERROR then
@@ -559,7 +583,7 @@ begin
     else
       years=cd_calendar(var_out&TIME,4)
     end if
-    var_out = dtrend_msg(years,var_out,False,False)   
+    var_out = dtrend_msg(years,var_out,True,False)
     read_ts_note=read_ts_note+"A linear trend has been removed. "
   end if
 
@@ -609,7 +633,6 @@ begin
   end if
   
   var_in=read_ts(name_wfullpath,variable_name,ts_opt)
-  
   if .not.all(ismissing(var_in)) then  
     if stat_name.eq."AnnCycAmp" then      
       if .not.isatt(var_in,"AnnCycle") then
@@ -630,7 +653,11 @@ begin
           stat_out=default_fillvalue("float")
           stat_out@_FillValue=default_fillvalue("float")
         else
-          stat_out=stats(stat_ind)
+          if stat_name.eq."stddev" then          
+            stat_out=sqrt(stats(stat_ind))
+          else
+            stat_out=stats(stat_ind)
+          end if
         end if 
       end if
       copy_VarAtts(var_in,stat_out)
