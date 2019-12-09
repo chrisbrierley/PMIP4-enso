@@ -50,15 +50,15 @@ do expt_i=0,n_expts-1
       print(gcm_names(i)+" in "+this_expt+" = "+enso_sst(i,0)+" & "+enso_sst(i,1)+" giving a ratio of "+\
       (enso_sst(i,0)-enso_sst(i,1))/enso_sst(i,1)*100.+"%") 
     end if
-    X1=extract_latlon_areastat(fnames_both(i,0),"sst_spatialmean_djf",(/-5.,5./),(/150.,190./),"mean")
-    X2=extract_latlon_areastat(fnames_both(i,0),"sst_spatialmean_djf",(/-5.,5./),(/150.,190./),"mean")
+    X1=extract_latlon_areastat(fnames_both(i,0),"sst_spatialmean_ann",(/-5.,5./),(/150.,190./),"mean")
+    X2=extract_latlon_areastat(fnames_both(i,0),"sst_spatialmean_ann",(/-5.,5./),(/240.,270./),"mean")
     ZonalSSTGrad(i,0)=(/X1-X2/)
-    X1=extract_latlon_areastat(fnames_both(i,1),"sst_spatialmean_djf",(/-5.,5./),(/240.,270./),"mean")
-    X2=extract_latlon_areastat(fnames_both(i,1),"sst_spatialmean_djf",(/-5.,5./),(/240.,270./),"mean")
+    X1=extract_latlon_areastat(fnames_both(i,1),"sst_spatialmean_ann",(/-5.,5./),(/150.,190./),"mean")
+    X2=extract_latlon_areastat(fnames_both(i,1),"sst_spatialmean_ann",(/-5.,5./),(/240.,270./),"mean")
     ZonalSSTGrad(i,1)=(/X1-X2/)
     delete([/X1,X2/])
     if VERBOSE then
-      print(gcm_names(i)+" in "+this_expt+" = Merid SST Grad of "+ZonalSSTGrad(i,0)+" (vs "+ZonalSSTGrad(i,1)+")") 
+      print(gcm_names(i)+" in "+this_expt+" = Zonal SST Grad of "+ZonalSSTGrad(i,0)+" (vs "+ZonalSSTGrad(i,1)+")") 
     end if
     if SCATTER_PCT_CHANGES then
       d_enso_sst(expt_i*num_pictl+i)=100.*(enso_sst(i,0)-enso_sst(i,1))/enso_sst(i,1)

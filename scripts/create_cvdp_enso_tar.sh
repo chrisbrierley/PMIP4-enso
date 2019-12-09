@@ -110,8 +110,8 @@ ncap2 -A -s 'nino34_spacomp_tas_ann=0.25f*(nino34_spacomp_tas_jja0+nino34_spacom
   C20-Reanalysis.cvdp_enso.1871-2012.nc C20-Reanalysis.cvdp_enso.1871-2012.nc
 
 #Remove duplicates
-rm bcc-csm1*nc
-rm UofT*.nc
+#rm bcc-csm1*nc
+#rm UofT*.nc 
 
 #make a .tar.gz archive
 rm PMIP4_cvdp_enso.tar.gz
