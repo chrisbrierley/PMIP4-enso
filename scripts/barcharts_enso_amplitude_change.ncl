@@ -18,13 +18,13 @@ VERBOSE=True ;if True, provides a information about the changes in variable (may
 VERY_VERBOSE=False ;if True, provides a some more information about whats going on in the plots - used for debugging mainly.
 OUTPUT_TYPE="pdf"; either "png" or "pdf"
 GCM_DICTIONARY=False; if True, will not print model names, but alphabetic look up from table
-MAKE_INDIVIDUAL_PLOTS=False; if True will actually create the plots.
+MAKE_INDIVIDUAL_PLOTS=True; if True will actually create the plots.
 troppac_region=(/(/-25.,25./),(/100.,280./)/);lat and lons of the edge of the plots (/(/latS,latN/),(/lonW,lonE/)/)
 expts=(/"piControl","historical","midHolocene","lgm","lig127k","1pctCO2","abrupt4xCO2"/)
 expts_color=(/"grey60","black","darkgreen","dodgerblue4","yellowgreen","firebrick","orangered2"/)
 n_expts=dimsizes(expts)-2
 
-VARIABLE="NWP" ;(/"enso","NCT","NWP","nino34"/)
+VARIABLE="nino34" ;(/"enso","NCT","NWP","nino34"/)
 if VARIABLE.eq."NCT" then
   var_name_str="NCT"
   plot_name_str="NCT"

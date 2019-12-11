@@ -770,6 +770,10 @@ begin
   mapres@cnFillOn        = True
   mapres@cnLinesOn       = False
   mapres@cnFillPalette = "BlueDarkRed18"
+  mapres@mpGridAndLimbOn = True
+  mapres@mpGridLatSpacingF =  15.            ; change latitude  line spacing
+  mapres@mpGridLonSpacingF = 15.           ; change longitude line spacing
+
   ;copy across the optional resources
   copy_VarAtts(opt_res,mapres)
 
@@ -787,10 +791,7 @@ begin
     mapres@gsnRightStringFontHeightF = 0.02
     mapres@mpGeophysicalLineColor = "gray42"
     mapres@mpPerimOn    = False
-    mapres@mpGridLatSpacingF =  15.            ; change latitude  line spacing
-    mapres@mpGridLonSpacingF = 15.           ; change longitude line spacing
     mapres@mpGridLineColor   = "transparent"  ; trick ncl into drawing perimeter
-    mapres@mpGridAndLimbOn   = True           ; turn on lat/lon lines  
   end if
   
   ;load in the optional ones
@@ -1053,6 +1054,10 @@ begin
   mapres@mpCenterLonF = -20.
   mapres@mpOutlineOn = True  
   mapres@cnFillPalette = "BlueWhiteOrangeRed"
+  mapres@mpGridAndLimbOn = True
+  mapres@mpGridLatSpacingF =  15.            ; change latitude  line spacing
+  mapres@mpGridLonSpacingF = 15.           ; change longitude line spacing
+
   copy_VarAtts(opt_res,mapres)
 
   ;use mpProjection as a supra-option
