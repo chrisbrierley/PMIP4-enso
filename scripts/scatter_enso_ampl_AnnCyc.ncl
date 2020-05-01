@@ -53,13 +53,14 @@ do expt_i=0,n_expts-1
     mode_sds(i,0)=(/stat_ts_var(fnames_both(i,0),"nino34_runstddev","mean",True)/)
     mode_sds(i,1)=(/stat_ts_var(fnames_both(i,1),"nino34_runstddev","mean",False)/)
     if VERBOSE then
-      print(gcm_names(i)+" in "+this_expt+" = "+mode_sds(i,0)+" & "+mode_sds(i,1)+" giving a ratio of "+\
+      print(gcm_names(i)+" in "+this_expt+" = NINO34 stddev of "+mode_sds(i,0)+" vs "+mode_sds(i,1)+" giving a ratio of "+\
       (mode_sds(i,0)-mode_sds(i,1))/mode_sds(i,1)*100.+"%") 
     end if
     AnnCycAmp(i,0)=(/stat_ts_var(fnames_both(i,0),"nino34","AnnCycAmp",True)/)
     AnnCycAmp(i,1)=(/stat_ts_var(fnames_both(i,1),"nino34","AnnCycAmp",False)/)
     if VERBOSE then
-      print(gcm_names(i)+" in "+this_expt+" = Annual Cycle of "+AnnCycAmp(i,0)+" (vs "+AnnCycAmp(i,1)+")") 
+      print(gcm_names(i)+" in "+this_expt+" = Annual Cycle of "+AnnCycAmp(i,0)+" (vs "+AnnCycAmp(i,1)+")"+" giving a ratio of "+\
+      (AnnCycAmp(i,0)-AnnCycAmp(i,1))/AnnCycAmp(i,1)*100.+"%") 
     end if
     if SCATTER_PCT_CHANGES then
       d_stddev(expt_i*num_pictl+i)=100.*(mode_sds(i,0)-mode_sds(i,1))/mode_sds(i,1)

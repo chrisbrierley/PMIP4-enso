@@ -255,7 +255,7 @@ begin
   lon_range_negi=lon_range.ge.-180.and.lon_range.lt.0
   if any(lon_range_negi) then
     if any(lon_range_posi) then
-      print("extract_latlon_areastat: Your lon_range is ("+lon_range(0)+","+lon_range(0)+") and I don't whether to use longitude of (-180:180) or (0:360)")
+      print("extract_latlon_areastat: Your lon_range is ("+lon_range(0)+","+lon_range(1)+") and I don't whether to use longitude of (-180:180) or (0:360)")
       exit
     else
       var_in=lonFlip(var_in)
@@ -866,8 +866,13 @@ begin
         end if
         if NORMALISE then
           this_patt=read_latlon_var(fnames(mod_i),variable_name(var_i),True)
-          norm_attrs(mod_i)=this_patt@$name_to_normalise_by$
-          patt(mod_i,:,:)=(/this_patt/norm_attrs(mod_i)/)
+          if (name_to_normalise_by.eq."relative_to_plot_area_average") then
+            norm_attrs(mod_i)=extract_latlon_areastat(fnames(mod_i),variable_name(var_i),(/mapres@mpMinLatF,mapres@mpMaxLatF/),(/mapres@mpMinLonF,mapres@mpMaxLonF/),"mean")
+            patt(mod_i,:,:)=(/this_patt-norm_attrs(mod_i)/)
+          else
+            norm_attrs(mod_i)=this_patt@$name_to_normalise_by$
+            patt(mod_i,:,:)=(/this_patt/norm_attrs(mod_i)/)
+          end if
           delete(this_patt)
         else
           patt(mod_i,:,:)=read_latlon_var(fnames(mod_i),variable_name(var_i),True)
@@ -1257,10 +1262,19 @@ begin
           print("Loading "+variable_name(var_i)+" from file "+mod_i+":"+fnames_both(mod_i,:))
         end if
         if NORMALISE then
-          this_patt=read_latlon_var(fnames_both(mod_i,0),variable_name(var_i),True)
-          patt(mod_i,0,:,:)=(/this_patt/this_patt@$name_to_normalise_by$/)
-          this_patt=read_latlon_var(fnames_both(mod_i,1),variable_name(var_i),True)
-          patt(mod_i,1,:,:)=(/this_patt/this_patt@$name_to_normalise_by$/)
+          if (name_to_normalise_by.eq."relative_to_plot_area_average") then
+            this_patt=read_latlon_var(fnames_both(mod_i,0),variable_name(var_i),True)
+            this_paa=extract_latlon_areastat(fnames_both(mod_i,0),variable_name(var_i),(/mapres@mpMinLatF,mapres@mpMaxLatF/),(/mapres@mpMinLonF,mapres@mpMaxLonF/),"mean")
+            patt(mod_i,0,:,:)=(/this_patt-this_paa/)
+            this_patt=read_latlon_var(fnames_both(mod_i,1),variable_name(var_i),True)
+            this_paa=extract_latlon_areastat(fnames_both(mod_i,1),variable_name(var_i),(/mapres@mpMinLatF,mapres@mpMaxLatF/),(/mapres@mpMinLonF,mapres@mpMaxLonF/),"mean")
+            patt(mod_i,1,:,:)=(/this_patt-this_paa/)
+          else
+            this_patt=read_latlon_var(fnames_both(mod_i,0),variable_name(var_i),True)
+            patt(mod_i,0,:,:)=(/this_patt/this_patt@$name_to_normalise_by$/)
+            this_patt=read_latlon_var(fnames_both(mod_i,1),variable_name(var_i),True)
+            patt(mod_i,1,:,:)=(/this_patt/this_patt@$name_to_normalise_by$/)
+          end if
           delete(this_patt)
         else
           patt(mod_i,0,:,:)=read_latlon_var(fnames_both(mod_i,0),variable_name(var_i),True)

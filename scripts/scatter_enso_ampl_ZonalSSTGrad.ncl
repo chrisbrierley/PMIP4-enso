@@ -20,6 +20,8 @@ GCM_DICTIONARY=False; if True, will not print model names, but alphabetic look u
 troppac_region=(/(/-25.,25./),(/100.,280./)/);lat and lons of the edge of the plots (/(/latS,latN/),(/lonW,lonE/)/)
 expts=(/"piControl","historical","midHolocene","lgm","lig127k","1pctCO2","abrupt4xCO2"/)
 expts_color=(/"grey60","black","darkgreen","dodgerblue4","yellowgreen","firebrick","orangered2"/)
+;expts=(/"piControl","historical","1pctCO2","abrupt4xCO2"/)
+;expts_color=(/"grey60","black","firebrick","orangered2"/)
 n_expts=dimsizes(expts)-2
 
 ;set up an array to hold the output data
@@ -58,7 +60,7 @@ do expt_i=0,n_expts-1
     ZonalSSTGrad(i,1)=(/X1-X2/)
     delete([/X1,X2/])
     if VERBOSE then
-      print(gcm_names(i)+" in "+this_expt+" = Zonal SST Grad of "+ZonalSSTGrad(i,0)+" (vs "+ZonalSSTGrad(i,1)+")") 
+      print(gcm_names(i)+" in "+this_expt+" = Zonal SST Grad of "+ZonalSSTGrad(i,0)+" (vs "+ZonalSSTGrad(i,1)+"): change of "+100.*(ZonalSSTGrad(i,0)-ZonalSSTGrad(i,1))/ZonalSSTGrad(i,1)+"%") 
     end if
     if SCATTER_PCT_CHANGES then
       d_enso_sst(expt_i*num_pictl+i)=100.*(enso_sst(i,0)-enso_sst(i,1))/enso_sst(i,1)
@@ -89,7 +91,7 @@ if SCATTER_PCT_CHANGES then
   res@tiYAxisString   = "Change in ENSO Amplitude (%)"
   res@tiXAxisString   = "Change in Zonal SST Gradient (%)"
 else
-  res@tiYAxisString   = "El Nino Amplitude (oC)"
+  res@tiYAxisString   = "El Nino Amplitude Change (oC)"
   res@tiXAxisString   = "Zonal SST Gradient Change (oC)"
 end if
 res@trYMaxF=max(d_enso_sst)
