@@ -622,17 +622,32 @@ end;read_ts
 ;      or "AnnCycAmp" which gives max(AnnCycle)-min(AnnCycle)
 
 undef("stat_ts_var")
-function stat_ts_var(name_wfullpath:string,variable_name:string,stat_name:string,ts_opt:logical)
+function stat_ts_var(name_wfullpath:string,variable_name:string,stat_name_in:string,ts_opt:logical)
 local name_wfullpath,variable_name,ts_opt,fil,poss_stats,stat_name
 begin
   ;read in variable and perform some checks.
-  poss_stats=(/"mean","stddev","skew","kurtosis","pcvar","AnnCycAmp"/)
-  if .not.any(poss_stats.eq.stat_name) then
+  poss_stats=(/"mean","stddev","skew","kurtosis","pcvar","AnnCycAmp","stddev_bandpass_2-8yrs"/)
+  if .not.any(poss_stats.eq.stat_name_in) then
     print("stat_ts_var: The only possible statistics accepted are "+str_join(poss_stats,","))
     exit
+  else
+    stat_name=stat_name_in
   end if
   
   var_in=read_ts(name_wfullpath,variable_name,ts_opt)
+  
+  if stat_name.eq."stddev_bandpass_2-8yrs" then
+    ; deploy a 2-8 yrs bandpass filter and set the variable to "stddev"
+    sigma = 1.0                           ; Lanczos sigma
+    offset = 24                           ; loose 2 years at each end
+    nwgt  = 2*offset+1                            
+    low_thres = 1/(8.*12)                 ; freq for period of 8 yrs (1/months)
+    hi_thres = 1/(2.*12)                  ; freq for period of 2 yrs (1/months)
+    wgts_interann  = filwgts_lanczos (nwgt,2,low_thres,hi_thres,sigma)
+    var_in=wgt_runave(var_in,wgts_interann,0)
+    stat_name="stddev"
+  end if
+  
   if .not.all(ismissing(var_in)) then  
     if stat_name.eq."AnnCycAmp" then      
       if .not.isatt(var_in,"AnnCycle") then
@@ -1428,8 +1443,8 @@ begin
       conf_res@gsnLeftString=""
       conf_res@cnLevels=confidence_level
       conf_res@cnMonoFillPattern    = False        ; Use multiple fill patterns
-      conf_res@cnFillPatterns    = (/0,17/) ;stippling for confidence
-      conf_res@cnFillColors      = (/"Transparent","Black"/)
+      conf_res@cnFillPatterns    = (/17,0/) ;stippling for confidence
+      conf_res@cnFillColors      = (/"Black","Transparent"/)
       conf_res@cnInfoLabelOn = False
       if RATIO then
         posi_diff=diff(lat|:,lon|:,gcm|:).gt.1
@@ -2200,8 +2215,8 @@ begin
     conf_res@gsnLeftString=""
     conf_res@cnLevels=confidence_level
     conf_res@cnMonoFillPattern    = False        ; Use multiple fill patterns
-    conf_res@cnFillPatterns    = (/0,17/) ;stippling for confidence
-    conf_res@cnFillColors      = (/"Transparent","Black"/)
+    conf_res@cnFillPatterns    = (/17,0/) ;stippling for confidence
+    conf_res@cnFillColors      = (/"Black","Transparent"/)
     conf_res@cnInfoLabelOn = False
     if RATIO then
       posi_diff=diff(lat|:,lon|:,gcm|:).gt.1
