@@ -19,8 +19,8 @@ VERY_VERBOSE=False ;if True, provides a some more information about whats going 
 OUTPUT_TYPE="pdf"; either "png" or "pdf"
 GCM_DICTIONARY=False; if True, will not print model names, but alphabetic look up from table
 MAKE_INDIVIDUAL_PLOTS=False; if True will create a plots.
-MAKE_ALL_EXPT_PLOT=False; if True will actually create the plots.
-MAKE_ALL_EXPT_CHANGE_PLOT=True; if True will actually create the plots.
+MAKE_ALL_EXPT_PLOT=True; if True will actually create the plots.
+MAKE_ALL_EXPT_CHANGE_PLOT=False; if True will actually create the plots.
 BANDPASS=True
 troppac_region=(/(/-25.,25./),(/100.,280./)/);lat and lons of the edge of the plots (/(/latS,latN/),(/lonW,lonE/)/)
 expts=(/"piControl","historical","midHolocene","lgm","lig127k","1pctCO2","abrupt4xCO2"/)
@@ -62,7 +62,7 @@ if any((/MAKE_INDIVIDUAL_PLOTS,MAKE_ALL_EXPT_PLOT,MAKE_ALL_EXPT_CHANGE_PLOT/)) t
   plot_res@tmYMajorGrid = False
   plot_res@tmXTOn = False
   plot_res@tmXBMode = "Explicit"
-  plot_res@tmXBLabelDirection="Down"
+  plot_res@tmXBLabelAngleF="90"
   plot_res@trXMinF = 0.5
   plot_res@trYMinF = 0.0
   plot_res@trYMaxF = 1.5
@@ -132,7 +132,7 @@ do expt_i=0,n_expts-1
     end if
   end do
   mode_sds(:,2)=(mode_sds(:,0)-mode_sds(:,1))/mode_sds(:,1)*100.
-  print("Ensemble mean change in "+this_expt+" = "+avg(mode_sds(:,2))+"%") 
+  print(this_expt+","+"Ens. Mean.,,,"+avg(mode_sds(:,2))) 
   
   if any((/MAKE_INDIVIDUAL_PLOTS,MAKE_ALL_EXPT_PLOT,MAKE_ALL_EXPT_CHANGE_PLOT/)) then 
     this_res=plot_res
@@ -185,6 +185,7 @@ do expt_i=0,n_expts-1
       end if
       this_res@trYMinF = -this_res@trYMaxF
       if MAKE_ALL_EXPT_CHANGE_PLOT then
+        this_res@gsnLeftString = panels_letter(expt_i+2)+" "+expts(expt_i+2)
         change_plots(expt_i) = gsn_csm_xy(wks,left_locations,mode_sds(:,2),this_res)
       else
         diff_baseplot = gsn_csm_xy(wks,left_locations,mode_sds(:,2),this_res)

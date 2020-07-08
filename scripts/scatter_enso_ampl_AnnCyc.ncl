@@ -50,8 +50,8 @@ do expt_i=0,n_expts-1
   do i=0,n_models-1
     a_nopath=str_get_field(fnames_both(i,0),str_fields_count(fnames_both(i,0),"/"),"/")
     gcm_names(i)=str_get_field(str_sub_str(a_nopath,"_"+this_expt,":"),1,":")
-    mode_sds(i,0)=(/stat_ts_var(fnames_both(i,0),"nino34_runstddev","mean",True)/)
-    mode_sds(i,1)=(/stat_ts_var(fnames_both(i,1),"nino34_runstddev","mean",False)/)
+    mode_sds(i,0)=(/stat_ts_var(fnames_both(i,0),"nino34","stddev_bandpass_2-8yrs",True)/)
+    mode_sds(i,1)=(/stat_ts_var(fnames_both(i,1),"nino34","stddev_bandpass_2-8yrs",False)/)
     if VERBOSE then
       print(gcm_names(i)+" in "+this_expt+" = NINO34 stddev of "+mode_sds(i,0)+" vs "+mode_sds(i,1)+" giving a ratio of "+\
       (mode_sds(i,0)-mode_sds(i,1))/mode_sds(i,1)*100.+"%") 
